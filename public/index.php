@@ -1,6 +1,6 @@
 <?php
 
-echo 'hi';
+require_once dirname(__DIR__).'/vendor/autoload.php';
 
 //router
 
