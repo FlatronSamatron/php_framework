@@ -2,12 +2,13 @@
 
 require_once dirname(__DIR__).'/vendor/autoload.php';
 
-use \Framework\Request;
+use Framework\Http\Request;
+use Framework\Http\Response;
 
 $request = Request::createFromGlobals();
 
-dd($request);
-
+$response = new Response('hi', 200, []);
+$response->send();
 //router
 
 //logic
