@@ -10,7 +10,7 @@ readonly class Request
             private array $postData,
             private array $cookies,
             private array $files,
-            private array $server,
+            public array $server,
     ) {
     }
 
