@@ -18,17 +18,6 @@ class Kernel
                 $collector->addRoute(...$route);
             }
 
-//            $collector->get('/', function(){
-//                $content = 'hi';
-//                return new Response($content, 200, []);
-//            });
-//
-//            $collector->get('/posts/{id}', function(array $vars){
-//                $content = "post - {$vars['id']}";
-//                return new Response($content, 200, []);
-//            });
-
-
         });
 
         $routeInfo = $dispatcher->dispatch(
@@ -36,9 +25,11 @@ class Kernel
                 $request->getPath()
         );
 
-        [$status, $handler, $vars] = $routeInfo;
+        [$status, [$controller, $method], $vars] = $routeInfo;
 
-        return $handler($vars);
+        $response = call_user_func_array([new $controller, $method], $vars);
+
+        return $response;
 
     }
 }
