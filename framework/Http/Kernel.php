@@ -3,17 +3,31 @@
 declare(strict_types=1);
 namespace Framework\Http;
 
+use Framework\Http\Exceptions\HttpException;
+use Framework\Http\Exceptions\MethodNotAllowedException;
+use Framework\Http\Exceptions\RouteNotFoundException;
+use Framework\Routing\RouterInterface;
+
 class Kernel
 {
 
-    public function __construct()
+    public function __construct(private RouterInterface $router)
     {
     }
 
     public function handle(Request $request): Response
     {
-        $content = 'hi';
+        try {
+            [$routeHandler, $vars] = $this->router->dispatch($request);
 
-        return new Response($content, 200, []);
+            $response = call_user_func_array($routeHandler, $vars);
+        } catch (HttpException $e){
+            $response = new Response($e->getMessage(), $e->getStatusCode());
+        } catch (\Throwable $e){
+            $response = new Response($e->getMessage(), 500);
+        }
+
+        return $response;
+
     }
 }
