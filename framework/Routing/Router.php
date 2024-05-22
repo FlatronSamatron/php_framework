@@ -15,9 +15,14 @@ class Router implements RouterInterface
 {
     public function dispatch($request): array
     {
-        [[$controller, $method], $vars] = $this->extractRouteInfo($request);
+        [$handler, $vars] = $this->extractRouteInfo($request);
 
-        return [[new $controller, $method], $vars];
+        if(is_array($handler)){
+            [$controller, $method] = $handler;
+            $handler = [new $controller, $method];
+        }
+
+        return [$handler, $vars];
     }
 
     private function extractRouteInfo(Request $request): array
@@ -41,9 +46,13 @@ class Router implements RouterInterface
                 return [$routeInfo[1], $routeInfo[2]];
             case Dispatcher::METHOD_NOT_ALLOWED:
                 $allowedMethods = implode(',', $routeInfo[1]);
-                throw new MethodNotAllowedException("Supported HTTP methods: {$allowedMethods}");
+                $exception = new MethodNotAllowedException("Supported HTTP methods: {$allowedMethods}");
+                $exception->setStatusCode(405);
+                throw $exception;
             default:
-                throw new RouteNotFoundException("Route not found");
+                $exception = new RouteNotFoundException("Route not found");
+                $exception->setStatusCode(404);
+                throw $exception;
         }
     }
 }
