@@ -3,6 +3,7 @@
 declare(strict_types=1);
 namespace Framework\Http;
 
+use Doctrine\DBAL\Connection;
 use Framework\Http\Exceptions\HttpException;
 use Framework\Routing\RouterInterface;
 use League\Container\Container;
@@ -21,10 +22,12 @@ class Kernel
     public function handle(Request $request): Response
     {
         try {
+            dd($this->container->get(Connection::class)->connect());
             [$routeHandler, $vars] = $this->router->dispatch($request, $this->container);
 
             $response = call_user_func_array($routeHandler, $vars);
         } catch (\Exception $e) {
+            dd($e);
             $response = $this->createExceptionResponse($e);
         }
 
