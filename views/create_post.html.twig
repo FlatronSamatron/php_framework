@@ -1,8 +1,21 @@
-{% extends 'default.html.twig' %}
+{% extends 'layouts/default.html.twig' %}
+
 {% block main %}
-    <h1>create post</h1>
-    <form action="">
-        <input type="text">
-        <input type="button" value="go">
-    </form>
+    <div class="bg-body-tertiary p-5 rounded">
+        <form action="/posts" method="post">
+            <div class="mb-3">
+                <label for="title" class="form-label">Заголовок</label>
+                <input type="text" value="Lorem ipsum dolor sit amet." name="title" class="form-control" id="title"
+                       aria-describedby="titleHelp" required>
+                <div id="titleHelp" class="form-text">Дайте своему посту броский заголовок.</div>
+            </div>
+            <div class="mb-3">
+                <label for="body" class="form-label">Контент</label>
+                <textarea name="body" id="" cols="30" rows="10" class="form-control" required>
+Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam consectetur nisi officia quae quis ut vitae. Aliquam aperiam enim hic ipsa minima nisi odio quod unde. Commodi cupiditate expedita fuga illo sunt vel voluptas?
+                </textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Добавить</button>
+        </form>
+    </div>
 {% endblock %}

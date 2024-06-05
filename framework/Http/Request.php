@@ -7,7 +7,7 @@ readonly class Request
 {
     public function __construct(
             private array $getParams,
-            private array $postData,
+            public array $postData,
             private array $cookies,
             private array $files,
             private array $server,
